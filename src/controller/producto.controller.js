@@ -12,6 +12,7 @@ const {
   getProductsByBody,
   getProductsByUser,
   getLatest5Products,
+  modificStock,
 } = require("../modelo/producto.model");
 
 const validateToken = (req, res, next) => {
@@ -131,6 +132,30 @@ const HandleGetLatest5Products = async (req, res) => {
   }
 };
 
+const updateStock = async (req, res) => {
+  try {
+    const { id_producto, cantidad } = req.body;
+
+    if (!id_producto || cantidad === undefined) {
+      return res.status(400).json({ error: "Faltan datos obligatorios" });
+    }
+
+    const cantidadNumerica = Number(cantidad);
+    if (isNaN(cantidadNumerica)) {
+      return res.status(400).json({ error: "Cantidad debe ser un número válido" });
+    }
+
+    const productoActualizado = await modificStock(id_producto, cantidadNumerica);
+    if (!productoActualizado) {
+      return res.status(404).json({ error: "Producto no encontrado" });
+    }
+
+    res.json({ mensaje: "Stock actualizado correctamente", producto: productoActualizado });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   validateToken,
   HandleGetProducts,
@@ -140,5 +165,6 @@ module.exports = {
   HandleGetProductsByType,
   HandleGetProductsByBody,
   HandleGetProductsByUser,
-  HandleGetLatest5Products
+  HandleGetLatest5Products,
+  updateStock,
 };

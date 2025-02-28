@@ -81,6 +81,22 @@ const getLatest5Products = async () => {
   }
 };
 
+const modificStock = async (id_producto, cantidad) => {
+  try {
+    const query = `
+      UPDATE productos
+      SET stock = stock + $1
+      WHERE id_producto = $2
+      RETURNING *;
+    `;
+    const result = await DB.query(query, [cantidad, id_producto]);
+    return result.rows[0]; // Retorna el producto actualizado
+  } catch (error) {
+    throw new Error("Error al modificar el stock: " + error.message);
+  }
+};
+
+
 module.exports = {
   getAllProducts,
   InsertProduct,
@@ -90,4 +106,5 @@ module.exports = {
   getProductsByBody,
   getProductsByUser,
   getLatest5Products,
+  modificStock,
 };

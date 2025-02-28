@@ -9,6 +9,7 @@ const {
   validateToken,
   HandleGetProductsByUser,
   HandleGetLatest5Products,
+  updateStock,
 } = require("../controller/producto.controller");
 
 const router = Router();  
@@ -19,6 +20,7 @@ router.get("/marca/:marca", HandleGetProductsByBrand);
 router.get("/tipo/:tipo", HandleGetProductsByType);
 router.get("/cuerpo/:cuerpo", HandleGetProductsByBody);
 router.get("/cincoultimos", HandleGetLatest5Products);
+router.put("/stock", updateStock);
 router.post("/agregar", validateToken, HandleNewProduct);
 router.get("/usuario/:id_usuario", HandleGetProductsByUser);
 
