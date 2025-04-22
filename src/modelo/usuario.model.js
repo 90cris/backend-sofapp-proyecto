@@ -45,37 +45,28 @@ const login = async (email, pass) => {
 
 const checkIfExists = async (email) => {
   try {
-    const SQLQuery = format(
-      `
-                SELECT * FROM usuario
-                WHERE email = %L
-            `,
-      email
-    );
+    const SQLQuery = "SELECT 1 FROM usuario WHERE email = $1";
+    const { rowCount } = await DB.query(SQLQuery, [email]);
 
-    const {
-      rows: [user],
-      rowCount,
-    } = await DB.query(SQLQuery);
-
-    if (!rowCount) {
-      throw new Error("NOT_FOUND");
-    } else {
-      return user;
-    }
+    return rowCount > 0; // Devuelve true si existe, false si no
   } catch (error) {
-    throw error;
+    console.error("Error en checkIfExists:", error);
+    throw new Error("ERROR_CHECKING_USER");
   }
 };
 
 const register = async (nombre, apellido, email, pass, fono) => {
   try {
+    const emailExists = await checkIfExists(email);
+    
+    if (emailExists) {
+      throw new Error("EMAIL_ALREADY_EXISTS"); 
+    }
+
     const SQLQuery = format(
-      `
-                INSERT INTO usuario (nombre, apellido, email, pass, fono )
-                VALUES (%L, %L, %L, %L, %L)
-                RETURNING *
-            `,
+      `INSERT INTO usuario (nombre, apellido, email, pass, fono)
+       VALUES (%L, %L, %L, %L, %L)
+       RETURNING *`,
       nombre,
       apellido,
       email,
@@ -83,18 +74,16 @@ const register = async (nombre, apellido, email, pass, fono) => {
       fono
     );
 
-    const {
-      rows: [user],
-      rowCount,
-    } = await DB.query(SQLQuery);
+    const { rows, rowCount } = await DB.query(SQLQuery);
 
     if (!rowCount) {
       throw new Error("BAD_REQUEST");
-    } else {
-      return user;
     }
+
+    return rows[0];
   } catch (error) {
-    throw error;
+    console.error("Error en register:", error);
+    throw error; 
   }
 };
 

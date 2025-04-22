@@ -12,7 +12,7 @@ const {
   getProductsByBody,
   getProductsByUser,
   getLatest5Products,
-  modificStock,
+  modifycStock,
 } = require("../modelo/producto.model");
 
 const validateToken = (req, res, next) => {
@@ -145,7 +145,7 @@ const updateStock = async (req, res) => {
       return res.status(400).json({ error: "Cantidad debe ser un número válido" });
     }
 
-    const productoActualizado = await modificStock(id_producto, cantidadNumerica);
+    const productoActualizado = await modifycStock(id_producto, cantidadNumerica);
     if (!productoActualizado) {
       return res.status(404).json({ error: "Producto no encontrado" });
     }

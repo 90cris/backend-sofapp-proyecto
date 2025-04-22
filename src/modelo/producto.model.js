@@ -81,7 +81,7 @@ const getLatest5Products = async () => {
   }
 };
 
-const modificStock = async (id_producto, cantidad) => {
+const modifycStock = async (id_producto, cantidad) => {
   try {
     const query = `
       UPDATE productos
@@ -106,5 +106,5 @@ module.exports = {
   getProductsByBody,
   getProductsByUser,
   getLatest5Products,
-  modificStock,
+  modifycStock,
 };
