@@ -41,7 +41,7 @@ const InsertProduct = async (producto) => {
 
   const result = await DB.query(
     `INSERT INTO producto (id_usuario, nombre, marca, tipo, cuerpo, alto, ancho, precio, foto, detalle, stock, color)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *;`,
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *;`,
     [
       id_usuario,
       nombre,
