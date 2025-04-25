@@ -3,7 +3,7 @@ const format = require("pg-format");
 // const { errorMiddleware } = require("../middlewares/errorsManager");
 
 const getAllProducts = async () => {
-  const result = await DB.query("SELECT * FROM producto;");
+  const result = await DB.query("SELECT * FROM productos;");
   return result.rows;
 };
 
