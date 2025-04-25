@@ -73,7 +73,7 @@ const getProductById = async (id) => {
   if (isNaN(productoId)) return null;
 
   const { rows } = await DB.query(
-    "SELECT * FROM productos WHERE id_producto = $1;",
+    "SELECT * FROM productos WHERE id = $1;",
     [productoId]
   );
   return rows[0] || null;
@@ -106,7 +106,7 @@ const getProductsByBody = async (cuerpo) => {
 const getLatest5Products = async () => {
   try {
     const { rows } = await DB.query(
-      "SELECT * FROM productos ORDER BY id_producto DESC LIMIT 5"
+      'SELECT * FROM productos ORDER BY id DESC LIMIT 5'
     );
     return rows;
   } catch (error) {
@@ -120,7 +120,7 @@ const modifycStock = async (id_producto, cantidad) => {
     const query = `
       UPDATE productos
       SET stock = stock + $1
-      WHERE id_producto = $2
+      WHERE id = $2
       RETURNING *;
     `;
     const result = await DB.query(query, [cantidad, id_producto]);
