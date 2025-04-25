@@ -93,7 +93,7 @@ const getUserDataByProduct = async (idProducto) => {
       SELECT u.nombre, u.apellido, u.email, u.fono
       FROM usuario u
       JOIN productos p ON u.id_usuario = p.id_usuario
-      WHERE p.id_producto = $1;
+      WHERE p.id = $1;
     `;
     
     const { rows } = await DB.query(query, [idProducto]);
