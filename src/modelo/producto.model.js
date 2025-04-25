@@ -14,26 +14,48 @@ const InsertProduct = async (producto) => {
     marca,
     tipo,
     cuerpo,
-    alto, 
+    alto,
     ancho,
     precio,
     foto,
-    detalle, 
+    detalle,
     stock,
     color,
   } = producto;
 
   if (
-    !nombre || !marca || !tipo || !cuerpo || !alto || !ancho ||
-    !precio || !foto || !detalle || !stock || !color
+    !nombre ||
+    !marca ||
+    !tipo ||
+    !cuerpo ||
+    !alto ||
+    !ancho ||
+    !precio ||
+    !foto ||
+    !detalle ||
+    !stock ||
+    !color
   ) {
     throw new Error("Faltan campos obligatorios para insertar el producto.");
   }
 
   const result = await DB.query(
     `INSERT INTO productos (id_usuario, nombre, marca, tipo, cuerpo, alto, ancho, precio, foto, detalle, stock, color)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *;`,
-    [id_usuario, nombre, marca, tipo, cuerpo, alto, ancho, precio, foto, detalle, stock, color]
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *;`,
+    [
+      id_usuario,
+      nombre,
+      marca,
+      tipo,
+      cuerpo,
+      alto,
+      ancho,
+      precio,
+      foto,
+      detalle,
+      stock,
+      color,
+    ]
   );
   return result.rows[0];
 };
@@ -48,24 +70,36 @@ const getProductsByUser = async (id_usuario) => {
 
 const getProductById = async (id) => {
   const productoId = parseInt(id, 10);
-  if (isNaN(productoId)) return null; 
+  if (isNaN(productoId)) return null;
 
-  const { rows } = await DB.query("SELECT * FROM productos WHERE id_producto = $1;", [productoId]);
+  const { rows } = await DB.query(
+    "SELECT * FROM productos WHERE id_producto = $1;",
+    [productoId]
+  );
   return rows[0] || null;
 };
 
 const getProductsByBrand = async (marca) => {
-  const { rows } = await DB.query("SELECT * FROM productos WHERE marca ILIKE  $1;", [marca]);
+  const { rows } = await DB.query(
+    "SELECT * FROM productos WHERE marca ILIKE  $1;",
+    [marca]
+  );
   return rows;
 };
 
 const getProductsByType = async (tipo) => {
-  const { rows } = await DB.query("SELECT * FROM productos WHERE tipo ILIKE $1;", [tipo]);
+  const { rows } = await DB.query(
+    "SELECT * FROM productos WHERE tipo ILIKE $1;",
+    [tipo]
+  );
   return rows;
 };
 
 const getProductsByBody = async (cuerpo) => {
-  const { rows } = await DB.query("SELECT * FROM productos WHERE cuerpo = $1;", [cuerpo]);
+  const { rows } = await DB.query(
+    "SELECT * FROM productos WHERE cuerpo = $1;",
+    [cuerpo]
+  );
   return rows;
 };
 
@@ -95,7 +129,6 @@ const modifycStock = async (id_producto, cantidad) => {
     throw new Error("Error al modificar el stock: " + error.message);
   }
 };
-
 
 module.exports = {
   getAllProducts,
