@@ -40,7 +40,7 @@ const InsertProduct = async (producto) => {
   }
 
   const result = await DB.query(
-    `INSERT INTO productos (id_usuario, nombre, marca, tipo, cuerpo, alto, ancho, precio, foto, detalle, stock, color)
+    `INSERT INTO producto (id_usuario, nombre, marca, tipo, cuerpo, alto, ancho, precio, foto, detalle, stock, color)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *;`,
     [
       id_usuario,
@@ -73,7 +73,7 @@ const getProductById = async (id) => {
   if (isNaN(productoId)) return null;
 
   const { rows } = await DB.query(
-    "SELECT * FROM productos WHERE id = $1;",
+    "SELECT * FROM producto WHERE id_producto = $1;",
     [productoId]
   );
   return rows[0] || null;
@@ -81,7 +81,7 @@ const getProductById = async (id) => {
 
 const getProductsByBrand = async (marca) => {
   const { rows } = await DB.query(
-    "SELECT * FROM productos WHERE marca ILIKE  $1;",
+    "SELECT * FROM producto WHERE marca ILIKE  $1;",
     [marca]
   );
   return rows;
@@ -89,7 +89,7 @@ const getProductsByBrand = async (marca) => {
 
 const getProductsByType = async (tipo) => {
   const { rows } = await DB.query(
-    "SELECT * FROM productos WHERE tipo ILIKE $1;",
+    "SELECT * FROM producto WHERE tipo ILIKE $1;",
     [tipo]
   );
   return rows;
@@ -97,7 +97,7 @@ const getProductsByType = async (tipo) => {
 
 const getProductsByBody = async (cuerpo) => {
   const { rows } = await DB.query(
-    "SELECT * FROM productos WHERE cuerpo = $1;",
+    "SELECT * FROM producto WHERE cuerpo = $1;",
     [cuerpo]
   );
   return rows;
@@ -106,7 +106,7 @@ const getProductsByBody = async (cuerpo) => {
 const getLatest5Products = async () => {
   try {
     const { rows } = await DB.query(
-      'SELECT * FROM productos ORDER BY id DESC LIMIT 5'
+      'SELECT * FROM producto ORDER BY id_producto DESC LIMIT 5'
     );
     return rows;
   } catch (error) {
@@ -118,9 +118,9 @@ const getLatest5Products = async () => {
 const modifycStock = async (id_producto, cantidad) => {
   try {
     const query = `
-      UPDATE productos
+      UPDATE producto
       SET stock = stock + $1
-      WHERE id = $2
+      WHERE id_producto = $2
       RETURNING *;
     `;
     const result = await DB.query(query, [cantidad, id_producto]);
