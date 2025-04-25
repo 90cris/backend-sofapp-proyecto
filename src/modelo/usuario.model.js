@@ -105,6 +105,7 @@ const getUserDataByProduct = async (idProducto) => {
     return rows[0];
   } catch (error) {
     console.error("Error en getUserDataByProduct:", error.message);
+    throw new Error("Error al buscar el usuario en la base de datos.");
     return [];
   }
 };
